@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QRcraft — Генератор QR-кодов</title>
+  <title>QRcraft — QR Code Generator</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -77,6 +77,35 @@
       align-items: center;
       gap: 12px;
     }
+
+    /* ── LANG SWITCHER ── */
+    .lang-switcher {
+      display: flex;
+      align-items: center;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .lang-btn {
+      padding: 6px 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      letter-spacing: 0.5px;
+      transition: all 0.2s;
+    }
+
+    .lang-btn.active {
+      background: linear-gradient(135deg, var(--purple), var(--indigo));
+      color: #fff;
+    }
+
+    .lang-btn:not(.active):hover { color: var(--text); }
 
     .btn {
       display: inline-flex;
@@ -287,10 +316,7 @@
       z-index: -1;
     }
 
-    .qr-box svg {
-      width: 100px;
-      height: 100px;
-    }
+    .qr-box svg { width: 100px; height: 100px; }
 
     .qr-ring {
       position: absolute;
@@ -371,16 +397,11 @@
       transition: opacity 0.3s;
     }
 
-    .card:hover {
-      border-color: rgba(124, 58, 237, 0.5);
-      transform: translateY(-3px);
-    }
-
+    .card:hover { border-color: rgba(124, 58, 237, 0.5); transform: translateY(-3px); }
     .card:hover::before { opacity: 1; }
 
     .card-icon {
-      width: 48px;
-      height: 48px;
+      width: 48px; height: 48px;
       background: rgba(124, 58, 237, 0.15);
       border: 1px solid rgba(124, 58, 237, 0.3);
       border-radius: 12px;
@@ -391,25 +412,10 @@
       font-size: 22px;
     }
 
-    .card h3 {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 10px;
-      letter-spacing: -0.3px;
-    }
+    .card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; letter-spacing: -0.3px; }
+    .card p { color: var(--muted); font-size: 14px; line-height: 1.65; }
 
-    .card p {
-      color: var(--muted);
-      font-size: 14px;
-      line-height: 1.65;
-    }
-
-    .tag-list {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 16px;
-    }
+    .tag-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
 
     .tag {
       background: var(--surface2);
@@ -446,8 +452,7 @@
       position: relative;
     }
 
-    .pricing-card.featured::after {
-      content: 'Популярный';
+    .featured-badge {
       position: absolute;
       top: -1px; right: 28px;
       background: linear-gradient(135deg, var(--purple), var(--indigo));
@@ -459,40 +464,12 @@
       letter-spacing: 0.3px;
     }
 
-    .plan-name {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 16px;
-    }
+    .plan-name { font-size: 15px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+    .plan-price { font-size: 52px; font-weight: 900; letter-spacing: -2px; margin-bottom: 4px; line-height: 1; }
+    .plan-price sup { font-size: 24px; font-weight: 700; vertical-align: super; letter-spacing: 0; }
+    .plan-period { font-size: 14px; color: var(--muted); margin-bottom: 32px; }
 
-    .plan-price {
-      font-size: 52px;
-      font-weight: 900;
-      letter-spacing: -2px;
-      margin-bottom: 4px;
-      line-height: 1;
-    }
-
-    .plan-price sup {
-      font-size: 24px;
-      font-weight: 700;
-      vertical-align: super;
-      letter-spacing: 0;
-    }
-
-    .plan-period {
-      font-size: 14px;
-      color: var(--muted);
-      margin-bottom: 32px;
-    }
-
-    .plan-features {
-      list-style: none;
-      margin-bottom: 36px;
-    }
+    .plan-features { list-style: none; margin-bottom: 36px; }
 
     .plan-features li {
       display: flex;
@@ -549,7 +526,6 @@
 
     footer a { color: var(--muted); text-decoration: none; }
     footer a:hover { color: var(--text); }
-
     .footer-links { display: flex; gap: 24px; }
 
     /* ── RESPONSIVE ── */
@@ -581,8 +557,12 @@
       QRcraft
     </a>
     <div class="nav-actions">
-      <button class="btn btn-ghost" onclick="void 0">Войти</button>
-      <button class="btn btn-primary" onclick="void 0">Начать бесплатно</button>
+      <div class="lang-switcher">
+        <button class="lang-btn active" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" onclick="setLang('ua')">UA</button>
+      </div>
+      <button class="btn btn-ghost" onclick="void 0" data-i18n="nav.login">Sign In</button>
+      <button class="btn btn-primary" onclick="void 0" data-i18n="nav.start">Get Started Free</button>
     </div>
   </nav>
 
@@ -595,28 +575,23 @@
     <div class="hero-content">
       <div class="badge">
         <span class="badge-dot"></span>
-        Бесплатно для старта
+        <span data-i18n="hero.badge">Free to get started</span>
       </div>
 
       <div class="qr-preview">
         <div class="qr-ring"></div>
         <div class="qr-ring-2"></div>
         <div class="qr-box">
-          <!-- inline QR pattern SVG -->
           <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Top-left corner -->
             <rect x="8" y="8" width="30" height="30" rx="4" fill="#7c3aed" opacity="0.15"/>
             <rect x="13" y="13" width="20" height="20" rx="2.5" fill="#7c3aed" opacity="0.25"/>
             <rect x="18" y="18" width="10" height="10" rx="1.5" fill="#a78bfa"/>
-            <!-- Top-right corner -->
             <rect x="62" y="8" width="30" height="30" rx="4" fill="#7c3aed" opacity="0.15"/>
             <rect x="67" y="13" width="20" height="20" rx="2.5" fill="#7c3aed" opacity="0.25"/>
             <rect x="72" y="18" width="10" height="10" rx="1.5" fill="#a78bfa"/>
-            <!-- Bottom-left corner -->
             <rect x="8" y="62" width="30" height="30" rx="4" fill="#7c3aed" opacity="0.15"/>
             <rect x="13" y="67" width="20" height="20" rx="2.5" fill="#7c3aed" opacity="0.25"/>
             <rect x="18" y="72" width="10" height="10" rx="1.5" fill="#a78bfa"/>
-            <!-- Data dots -->
             <rect x="48" y="8" width="7" height="7" rx="1.5" fill="#6d28d9"/>
             <rect x="58" y="8" width="7" height="7" rx="1.5" fill="#6d28d9" opacity="0.5"/>
             <rect x="8" y="48" width="7" height="7" rx="1.5" fill="#6d28d9" opacity="0.7"/>
@@ -641,37 +616,37 @@
       </div>
 
       <h1>
-        <span class="gradient-text">QR-коды</span><br />
-        за секунды
+        <span class="gradient-text" data-i18n="hero.h1a">QR Codes</span><br />
+        <span data-i18n="hero.h1b">in seconds</span>
       </h1>
 
-      <p>
-        Создавайте стильные QR-коды для ссылок, контактов, Wi-Fi и событий.
-        Настраивайте дизайн, отслеживайте сканирования и редактируйте коды без замены.
+      <p data-i18n="hero.desc">
+        Create stylish QR codes for links, contacts, Wi-Fi and events.
+        Customize the design, track scans and edit codes without replacement.
       </p>
 
       <div class="hero-actions">
         <button class="btn btn-primary btn-xl" onclick="void 0">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
-          Создать QR-код
+          <span data-i18n="hero.cta">Create QR Code</span>
         </button>
-        <button class="btn btn-ghost btn-xl" onclick="void 0">Посмотреть тарифы</button>
+        <button class="btn btn-ghost btn-xl" onclick="void 0" data-i18n="hero.pricing">View Pricing</button>
       </div>
 
       <div class="hero-stats">
         <div class="stat">
           <div class="stat-value">100K+</div>
-          <div class="stat-label">QR-кодов создано</div>
+          <div class="stat-label" data-i18n="stats.generated">QR codes generated</div>
         </div>
         <div class="stat-divider"></div>
         <div class="stat">
-          <div class="stat-value">5 типов</div>
-          <div class="stat-label">контента</div>
+          <div class="stat-value">5</div>
+          <div class="stat-label" data-i18n="stats.types">content types</div>
         </div>
         <div class="stat-divider"></div>
         <div class="stat">
           <div class="stat-value">PNG / SVG</div>
-          <div class="stat-label">форматы экспорта</div>
+          <div class="stat-label" data-i18n="stats.export">export formats</div>
         </div>
       </div>
     </div>
@@ -679,51 +654,51 @@
 
   <!-- FEATURES -->
   <section id="features">
-    <div class="section-label">Возможности</div>
-    <h2 class="section-title">Всё что нужно<br />для работы с QR</h2>
-    <p class="section-desc">Мощный редактор, гибкие настройки и аналитика — в одном инструменте.</p>
+    <div class="section-label" data-i18n="features.label">Features</div>
+    <h2 class="section-title" data-i18n="features.title">Everything you need<br />to work with QR</h2>
+    <p class="section-desc" data-i18n="features.desc">Powerful editor, flexible settings and analytics — all in one tool.</p>
 
     <div class="features-grid">
       <div class="card">
         <div class="card-icon">🔗</div>
-        <h3>Разные типы контента</h3>
-        <p>Поддержка популярных форматов для любых задач — от сайта до визитки.</p>
+        <h3 data-i18n="f1.title">Multiple Content Types</h3>
+        <p data-i18n="f1.desc">Support for popular formats for any task — from websites to business cards.</p>
         <div class="tag-list">
           <span class="tag">URL</span>
-          <span class="tag">Текст</span>
+          <span class="tag" data-i18n="tag.text">Text</span>
           <span class="tag">vCard</span>
           <span class="tag">Wi-Fi</span>
-          <span class="tag">Событие</span>
+          <span class="tag" data-i18n="tag.event">Event</span>
         </div>
       </div>
 
       <div class="card">
         <div class="card-icon">🎨</div>
-        <h3>Кастомный дизайн</h3>
-        <p>Выберите цвет, форму углов и точек, добавьте логотип прямо в центр QR-кода.</p>
+        <h3 data-i18n="f2.title">Custom Design</h3>
+        <p data-i18n="f2.desc">Choose colors, corner and dot shapes, add your logo right in the center of the QR code.</p>
         <div class="tag-list">
-          <span class="tag">Цвет</span>
-          <span class="tag">Логотип</span>
-          <span class="tag">Форма</span>
+          <span class="tag" data-i18n="tag.color">Color</span>
+          <span class="tag" data-i18n="tag.logo">Logo</span>
+          <span class="tag" data-i18n="tag.shape">Shape</span>
         </div>
       </div>
 
       <div class="card">
         <div class="card-icon">📊</div>
-        <h3>Аналитика сканирований</h3>
-        <p>Отслеживайте сколько раз и когда сканировали ваш QR-код в реальном времени.</p>
+        <h3 data-i18n="f3.title">Scan Analytics</h3>
+        <p data-i18n="f3.desc">Track how many times and when your QR code was scanned in real time.</p>
       </div>
 
       <div class="card">
         <div class="card-icon">✏️</div>
-        <h3>Редактирование без замены</h3>
-        <p>Измените ссылку или данные QR-кода в любой момент — сам код останется прежним.</p>
+        <h3 data-i18n="f4.title">Edit Without Replacement</h3>
+        <p data-i18n="f4.desc">Change the link or QR code data at any time — the code itself stays the same.</p>
       </div>
 
       <div class="card">
         <div class="card-icon">💾</div>
-        <h3>Экспорт и хранение</h3>
-        <p>Скачивайте в PNG, SVG или PDF. Все коды хранятся в аккаунте для повторного использования.</p>
+        <h3 data-i18n="f5.title">Export & Storage</h3>
+        <p data-i18n="f5.desc">Download as PNG, SVG or PDF. All codes are stored in your account for reuse.</p>
         <div class="tag-list">
           <span class="tag">PNG</span>
           <span class="tag">SVG</span>
@@ -733,48 +708,49 @@
 
       <div class="card">
         <div class="card-icon">♾️</div>
-        <h3>Без лимитов по подписке</h3>
-        <p>Бесплатный план ограничен. Подписка снимает все ограничения на количество QR-кодов.</p>
+        <h3 data-i18n="f6.title">Unlimited on Pro</h3>
+        <p data-i18n="f6.desc">The free plan has limits. A subscription removes all restrictions on the number of QR codes.</p>
       </div>
     </div>
   </section>
 
   <!-- PRICING -->
   <section id="pricing" class="pricing-section">
-    <div class="section-label">Тарифы</div>
-    <h2 class="section-title">Простые и понятные цены</h2>
-    <p class="section-desc">Начните бесплатно, перейдите на Pro когда нужно больше.</p>
+    <div class="section-label" data-i18n="pricing.label">Pricing</div>
+    <h2 class="section-title" data-i18n="pricing.title">Simple, transparent pricing</h2>
+    <p class="section-desc" data-i18n="pricing.desc">Start for free, upgrade to Pro when you need more.</p>
 
     <div class="pricing-grid">
       <div class="pricing-card">
-        <div class="plan-name">Бесплатно</div>
+        <div class="plan-name" data-i18n="plan.free">Free</div>
         <div class="plan-price">0 <sup>€</sup></div>
-        <div class="plan-period">навсегда</div>
+        <div class="plan-period" data-i18n="plan.free.period">forever</div>
         <ul class="plan-features">
-          <li><span class="check">✓</span> До 5 QR-кодов</li>
-          <li><span class="check">✓</span> URL и текст</li>
-          <li><span class="check">✓</span> Экспорт PNG</li>
-          <li><span class="check">✓</span> Базовый дизайн</li>
+          <li><span class="check">✓</span> <span data-i18n="plan.free.f1">Up to 5 QR codes</span></li>
+          <li><span class="check">✓</span> <span data-i18n="plan.free.f2">URL and text</span></li>
+          <li><span class="check">✓</span> <span data-i18n="plan.free.f3">PNG export</span></li>
+          <li><span class="check">✓</span> <span data-i18n="plan.free.f4">Basic design</span></li>
         </ul>
-        <button class="btn btn-ghost" style="width:100%; padding:14px;" onclick="void 0">
-          Начать бесплатно
+        <button class="btn btn-ghost" style="width:100%; padding:14px;" onclick="void 0" data-i18n="plan.free.btn">
+          Get Started Free
         </button>
       </div>
 
       <div class="pricing-card featured">
+        <span class="featured-badge" data-i18n="plan.popular">Popular</span>
         <div class="plan-name">Pro</div>
         <div class="plan-price"><sup>€</sup>4.99</div>
-        <div class="plan-period">в месяц</div>
+        <div class="plan-period" data-i18n="plan.pro.period">per month</div>
         <ul class="plan-features">
-          <li><span class="check">✓</span> Неограниченные QR-коды</li>
-          <li><span class="check">✓</span> Все типы контента</li>
-          <li><span class="check">✓</span> PNG, SVG, PDF экспорт</li>
-          <li><span class="check">✓</span> Кастомный дизайн и логотип</li>
-          <li><span class="check">✓</span> Аналитика сканирований</li>
-          <li><span class="check">✓</span> Редактирование без замены</li>
+          <li><span class="check">✓</span> <span data-i18n="plan.pro.f1">Unlimited QR codes</span></li>
+          <li><span class="check">✓</span> <span data-i18n="plan.pro.f2">All content types</span></li>
+          <li><span class="check">✓</span> <span data-i18n="plan.pro.f3">PNG, SVG, PDF export</span></li>
+          <li><span class="check">✓</span> <span data-i18n="plan.pro.f4">Custom design & logo</span></li>
+          <li><span class="check">✓</span> <span data-i18n="plan.pro.f5">Scan analytics</span></li>
+          <li><span class="check">✓</span> <span data-i18n="plan.pro.f6">Edit without replacement</span></li>
         </ul>
-        <button class="btn btn-primary" style="width:100%; padding:14px;" onclick="void 0">
-          Подключить Pro
+        <button class="btn btn-primary" style="width:100%; padding:14px;" onclick="void 0" data-i18n="plan.pro.btn">
+          Get Pro
         </button>
       </div>
     </div>
@@ -783,12 +759,10 @@
   <!-- CTA -->
   <section class="cta-section">
     <div class="glow glow-1"></div>
-    <div class="section-label">Старт</div>
-    <h2 class="section-title">Готовы создать<br />первый QR-код?</h2>
-    <p class="section-desc">Регистрация за 30 секунд. Первые 5 кодов — бесплатно и без ограничений по времени.</p>
-    <button class="btn btn-primary btn-xl" onclick="void 0">
-      Попробовать бесплатно
-    </button>
+    <div class="section-label" data-i18n="cta.label">Get Started</div>
+    <h2 class="section-title" data-i18n="cta.title">Ready to create your<br />first QR code?</h2>
+    <p class="section-desc" data-i18n="cta.desc">Sign up in 30 seconds. First 5 codes are free with no time limit.</p>
+    <button class="btn btn-primary btn-xl" onclick="void 0" data-i18n="cta.btn">Try for Free</button>
   </section>
 
   <!-- FOOTER -->
@@ -806,12 +780,150 @@
       QRcraft
     </a>
     <div class="footer-links">
-      <a href="#">Конфиденциальность</a>
-      <a href="#">Условия</a>
-      <a href="#">Поддержка</a>
+      <a href="#" data-i18n="footer.privacy">Privacy</a>
+      <a href="#" data-i18n="footer.terms">Terms</a>
+      <a href="#" data-i18n="footer.support">Support</a>
     </div>
     <span>© 2026 QRcraft</span>
   </footer>
+
+  <script>
+    const translations = {
+      en: {
+        'nav.login': 'Sign In',
+        'nav.start': 'Get Started Free',
+        'hero.badge': 'Free to get started',
+        'hero.h1a': 'QR Codes',
+        'hero.h1b': 'in seconds',
+        'hero.desc': 'Create stylish QR codes for links, contacts, Wi-Fi and events. Customize the design, track scans and edit codes without replacement.',
+        'hero.cta': 'Create QR Code',
+        'hero.pricing': 'View Pricing',
+        'stats.generated': 'QR codes generated',
+        'stats.types': 'content types',
+        'stats.export': 'export formats',
+        'features.label': 'Features',
+        'features.title': 'Everything you need<br>to work with QR',
+        'features.desc': 'Powerful editor, flexible settings and analytics — all in one tool.',
+        'f1.title': 'Multiple Content Types',
+        'f1.desc': 'Support for popular formats for any task — from websites to business cards.',
+        'f2.title': 'Custom Design',
+        'f2.desc': 'Choose colors, corner and dot shapes, add your logo right in the center of the QR code.',
+        'f3.title': 'Scan Analytics',
+        'f3.desc': 'Track how many times and when your QR code was scanned in real time.',
+        'f4.title': 'Edit Without Replacement',
+        'f4.desc': 'Change the link or QR code data at any time — the code itself stays the same.',
+        'f5.title': 'Export & Storage',
+        'f5.desc': 'Download as PNG, SVG or PDF. All codes are stored in your account for reuse.',
+        'f6.title': 'Unlimited on Pro',
+        'f6.desc': 'The free plan has limits. A subscription removes all restrictions on the number of QR codes.',
+        'tag.text': 'Text',
+        'tag.event': 'Event',
+        'tag.color': 'Color',
+        'tag.logo': 'Logo',
+        'tag.shape': 'Shape',
+        'pricing.label': 'Pricing',
+        'pricing.title': 'Simple, transparent pricing',
+        'pricing.desc': 'Start for free, upgrade to Pro when you need more.',
+        'plan.free': 'Free',
+        'plan.free.period': 'forever',
+        'plan.free.f1': 'Up to 5 QR codes',
+        'plan.free.f2': 'URL and text',
+        'plan.free.f3': 'PNG export',
+        'plan.free.f4': 'Basic design',
+        'plan.free.btn': 'Get Started Free',
+        'plan.popular': 'Popular',
+        'plan.pro.period': 'per month',
+        'plan.pro.f1': 'Unlimited QR codes',
+        'plan.pro.f2': 'All content types',
+        'plan.pro.f3': 'PNG, SVG, PDF export',
+        'plan.pro.f4': 'Custom design & logo',
+        'plan.pro.f5': 'Scan analytics',
+        'plan.pro.f6': 'Edit without replacement',
+        'plan.pro.btn': 'Get Pro',
+        'cta.label': 'Get Started',
+        'cta.title': 'Ready to create your<br>first QR code?',
+        'cta.desc': 'Sign up in 30 seconds. First 5 codes are free with no time limit.',
+        'cta.btn': 'Try for Free',
+        'footer.privacy': 'Privacy',
+        'footer.terms': 'Terms',
+        'footer.support': 'Support',
+      },
+      ua: {
+        'nav.login': 'Увійти',
+        'nav.start': 'Почати безкоштовно',
+        'hero.badge': 'Безкоштовно для старту',
+        'hero.h1a': 'QR-коди',
+        'hero.h1b': 'за секунди',
+        'hero.desc': 'Створюйте стильні QR-коди для посилань, контактів, Wi-Fi та подій. Налаштовуйте дизайн, відстежуйте сканування та редагуйте коди без заміни.',
+        'hero.cta': 'Створити QR-код',
+        'hero.pricing': 'Переглянути тарифи',
+        'stats.generated': 'QR-кодів створено',
+        'stats.types': 'типи контенту',
+        'stats.export': 'формати експорту',
+        'features.label': 'Можливості',
+        'features.title': 'Все що потрібно<br>для роботи з QR',
+        'features.desc': 'Потужний редактор, гнучкі налаштування та аналітика — в одному інструменті.',
+        'f1.title': 'Різні типи контенту',
+        'f1.desc': 'Підтримка популярних форматів для будь-яких завдань — від сайту до візитки.',
+        'f2.title': 'Кастомний дизайн',
+        'f2.desc': 'Оберіть колір, форму кутів і точок, додайте логотип прямо в центр QR-коду.',
+        'f3.title': 'Аналітика сканувань',
+        'f3.desc': 'Відстежуйте скільки разів і коли сканували ваш QR-код у реальному часі.',
+        'f4.title': 'Редагування без заміни',
+        'f4.desc': 'Змініть посилання або дані QR-коду будь-коли — сам код залишиться незмінним.',
+        'f5.title': 'Експорт та зберігання',
+        'f5.desc': 'Завантажуйте у PNG, SVG або PDF. Всі коди зберігаються в акаунті для повторного використання.',
+        'f6.title': 'Без лімітів на Pro',
+        'f6.desc': 'Безкоштовний план обмежений. Підписка знімає всі обмеження на кількість QR-кодів.',
+        'tag.text': 'Текст',
+        'tag.event': 'Подія',
+        'tag.color': 'Колір',
+        'tag.logo': 'Логотип',
+        'tag.shape': 'Форма',
+        'pricing.label': 'Тарифи',
+        'pricing.title': 'Прості та зрозумілі ціни',
+        'pricing.desc': 'Починайте безкоштовно, переходьте на Pro коли потрібно більше.',
+        'plan.free': 'Безкоштовно',
+        'plan.free.period': 'назавжди',
+        'plan.free.f1': 'До 5 QR-кодів',
+        'plan.free.f2': 'URL та текст',
+        'plan.free.f3': 'Експорт PNG',
+        'plan.free.f4': 'Базовий дизайн',
+        'plan.free.btn': 'Почати безкоштовно',
+        'plan.popular': 'Популярний',
+        'plan.pro.period': 'на місяць',
+        'plan.pro.f1': 'Необмежені QR-коди',
+        'plan.pro.f2': 'Всі типи контенту',
+        'plan.pro.f3': 'Експорт PNG, SVG, PDF',
+        'plan.pro.f4': 'Кастомний дизайн і логотип',
+        'plan.pro.f5': 'Аналітика сканувань',
+        'plan.pro.f6': 'Редагування без заміни',
+        'plan.pro.btn': 'Підключити Pro',
+        'cta.label': 'Старт',
+        'cta.title': 'Готові створити<br>перший QR-код?',
+        'cta.desc': 'Реєстрація за 30 секунд. Перші 5 кодів — безкоштовно і без обмежень за часом.',
+        'cta.btn': 'Спробувати безкоштовно',
+        'footer.privacy': 'Конфіденційність',
+        'footer.terms': 'Умови',
+        'footer.support': 'Підтримка',
+      }
+    };
+
+    function setLang(lang) {
+      const t = translations[lang];
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] !== undefined) el.innerHTML = t[key];
+      });
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.toLowerCase() === lang);
+      });
+      document.documentElement.lang = lang === 'ua' ? 'uk' : 'en';
+    }
+
+    // Default language
+    setLang('en');
+  </script>
 
 </body>
 </html>
