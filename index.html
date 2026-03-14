@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QRcraft — Генератор QR-кодов</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --purple: #7c3aed;
+      --purple-light: #a78bfa;
+      --purple-dark: #5b21b6;
+      --indigo: #4f46e5;
+      --bg: #09090b;
+      --surface: #18181b;
+      --surface2: #27272a;
+      --border: #3f3f46;
+      --text: #fafafa;
+      --muted: #a1a1aa;
+      --radius: 16px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 40px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(9, 9, 11, 0.75);
+      border-bottom: 1px solid rgba(63, 63, 70, 0.5);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .logo-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--purple), var(--indigo));
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon svg { width: 20px; height: 20px; }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 22px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      text-decoration: none;
+    }
+
+    .btn-ghost {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+
+    .btn-ghost:hover {
+      color: var(--text);
+      border-color: var(--purple-light);
+      background: rgba(124, 58, 237, 0.08);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--purple), var(--indigo));
+      color: #fff;
+      box-shadow: 0 0 24px rgba(124, 58, 237, 0.35);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 0 36px rgba(124, 58, 237, 0.55);
+      transform: translateY(-1px);
+    }
+
+    .btn-primary:active { transform: translateY(0); }
+
+    .btn-xl {
+      padding: 16px 36px;
+      font-size: 16px;
+      border-radius: 14px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 120px 24px 80px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .glow {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(80px);
+      pointer-events: none;
+    }
+
+    .glow-1 {
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(124, 58, 237, 0.25) 0%, transparent 70%);
+      top: -100px; left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .glow-2 {
+      width: 400px; height: 400px;
+      background: radial-gradient(circle, rgba(79, 70, 229, 0.2) 0%, transparent 70%);
+      bottom: 0; right: -100px;
+    }
+
+    .glow-3 {
+      width: 300px; height: 300px;
+      background: radial-gradient(circle, rgba(167, 139, 250, 0.15) 0%, transparent 70%);
+      bottom: 100px; left: -50px;
+    }
+
+    .hero-content { position: relative; z-index: 1; max-width: 780px; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(124, 58, 237, 0.15);
+      border: 1px solid rgba(124, 58, 237, 0.4);
+      color: var(--purple-light);
+      padding: 6px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 28px;
+      letter-spacing: 0.3px;
+    }
+
+    .badge-dot {
+      width: 7px; height: 7px;
+      background: var(--purple-light);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+
+    .hero h1 {
+      font-size: clamp(42px, 6vw, 80px);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -2.5px;
+      margin-bottom: 24px;
+    }
+
+    .gradient-text {
+      background: linear-gradient(135deg, #fff 30%, var(--purple-light) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 560px;
+      margin: 0 auto 40px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      flex-wrap: wrap;
+    }
+
+    .hero-stats {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      margin-top: 60px;
+      padding-top: 40px;
+      border-top: 1px solid var(--border);
+    }
+
+    .stat { text-align: center; }
+
+    .stat-value {
+      font-size: 32px;
+      font-weight: 800;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, #fff, var(--purple-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    .stat-divider {
+      width: 1px;
+      height: 40px;
+      background: var(--border);
+    }
+
+    /* ── QR PREVIEW ── */
+    .qr-preview {
+      position: relative;
+      margin: 0 auto;
+      width: 140px;
+      height: 140px;
+      margin-bottom: 48px;
+    }
+
+    .qr-box {
+      width: 140px;
+      height: 140px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .qr-box::before {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      background: linear-gradient(135deg, var(--purple), var(--indigo), transparent, transparent);
+      border-radius: 20px;
+      z-index: -1;
+    }
+
+    .qr-box svg {
+      width: 100px;
+      height: 100px;
+    }
+
+    .qr-ring {
+      position: absolute;
+      inset: -16px;
+      border-radius: 36px;
+      border: 1px solid rgba(124, 58, 237, 0.3);
+      animation: spin-slow 8s linear infinite;
+    }
+
+    .qr-ring-2 {
+      position: absolute;
+      inset: -32px;
+      border-radius: 50px;
+      border: 1px solid rgba(79, 70, 229, 0.15);
+      animation: spin-slow 12s linear infinite reverse;
+    }
+
+    @keyframes spin-slow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    /* ── FEATURES ── */
+    section { padding: 100px 24px; }
+
+    .section-label {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--purple-light);
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: clamp(30px, 4vw, 48px);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      margin-bottom: 16px;
+    }
+
+    .section-desc {
+      text-align: center;
+      color: var(--muted);
+      font-size: 17px;
+      max-width: 520px;
+      margin: 0 auto 64px;
+      line-height: 1.65;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 32px;
+      transition: border-color 0.3s, transform 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--purple), transparent);
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .card:hover {
+      border-color: rgba(124, 58, 237, 0.5);
+      transform: translateY(-3px);
+    }
+
+    .card:hover::before { opacity: 1; }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      background: rgba(124, 58, 237, 0.15);
+      border: 1px solid rgba(124, 58, 237, 0.3);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+      font-size: 22px;
+    }
+
+    .card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      letter-spacing: -0.3px;
+    }
+
+    .card p {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .tag-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .tag {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    /* ── PRICING ── */
+    .pricing-section { background: var(--surface); }
+
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .pricing-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 40px 36px;
+      transition: all 0.3s;
+    }
+
+    .pricing-card.featured {
+      background: linear-gradient(145deg, rgba(124, 58, 237, 0.12), rgba(79, 70, 229, 0.08));
+      border-color: rgba(124, 58, 237, 0.5);
+      position: relative;
+    }
+
+    .pricing-card.featured::after {
+      content: 'Популярный';
+      position: absolute;
+      top: -1px; right: 28px;
+      background: linear-gradient(135deg, var(--purple), var(--indigo));
+      color: #fff;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 0 0 10px 10px;
+      letter-spacing: 0.3px;
+    }
+
+    .plan-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+
+    .plan-price {
+      font-size: 52px;
+      font-weight: 900;
+      letter-spacing: -2px;
+      margin-bottom: 4px;
+      line-height: 1;
+    }
+
+    .plan-price sup {
+      font-size: 24px;
+      font-weight: 700;
+      vertical-align: super;
+      letter-spacing: 0;
+    }
+
+    .plan-period {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+
+    .plan-features {
+      list-style: none;
+      margin-bottom: 36px;
+    }
+
+    .plan-features li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      color: var(--muted);
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .plan-features li:last-child { border-bottom: none; }
+
+    .plan-features .check {
+      width: 20px; height: 20px;
+      background: rgba(124, 58, 237, 0.2);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 11px;
+      color: var(--purple-light);
+    }
+
+    /* ── CTA ── */
+    .cta-section {
+      padding: 100px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-section .glow-1 {
+      top: 50%;
+      transform: translate(-50%, -50%);
+      width: 500px; height: 500px;
+      opacity: 0.5;
+    }
+
+    .cta-section .section-title { margin-bottom: 20px; }
+    .cta-section .section-desc { margin-bottom: 40px; }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--text); }
+
+    .footer-links { display: flex; gap: 24px; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 640px) {
+      nav { padding: 14px 20px; }
+      .hero-stats { gap: 20px; }
+      .stat-value { font-size: 24px; }
+      footer { flex-direction: column; gap: 16px; text-align: center; }
+      .footer-links { justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="#" class="logo">
+      <div class="logo-icon">
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect x="2" y="2" width="6" height="6" rx="1" fill="white"/>
+          <rect x="12" y="2" width="6" height="6" rx="1" fill="white"/>
+          <rect x="2" y="12" width="6" height="6" rx="1" fill="white"/>
+          <rect x="12" y="12" width="3" height="3" rx="0.5" fill="white"/>
+          <rect x="17" y="12" width="1" height="1" rx="0.3" fill="white"/>
+          <rect x="15" y="15" width="3" height="3" rx="0.5" fill="white"/>
+          <rect x="12" y="17" width="1" height="1" rx="0.3" fill="white"/>
+        </svg>
+      </div>
+      QRcraft
+    </a>
+    <div class="nav-actions">
+      <button class="btn btn-ghost" onclick="void 0">Войти</button>
+      <button class="btn btn-primary" onclick="void 0">Начать бесплатно</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="glow glow-1"></div>
+    <div class="glow glow-2"></div>
+    <div class="glow glow-3"></div>
+
+    <div class="hero-content">
+      <div class="badge">
+        <span class="badge-dot"></span>
+        Бесплатно для старта
+      </div>
+
+      <div class="qr-preview">
+        <div class="qr-ring"></div>
+        <div class="qr-ring-2"></div>
+        <div class="qr-box">
+          <!-- inline QR pattern SVG -->
+          <svg viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Top-left corner -->
+            <rect x="8" y="8" width="30" height="30" rx="4" fill="#7c3aed" opacity="0.15"/>
+            <rect x="13" y="13" width="20" height="20" rx="2.5" fill="#7c3aed" opacity="0.25"/>
+            <rect x="18" y="18" width="10" height="10" rx="1.5" fill="#a78bfa"/>
+            <!-- Top-right corner -->
+            <rect x="62" y="8" width="30" height="30" rx="4" fill="#7c3aed" opacity="0.15"/>
+            <rect x="67" y="13" width="20" height="20" rx="2.5" fill="#7c3aed" opacity="0.25"/>
+            <rect x="72" y="18" width="10" height="10" rx="1.5" fill="#a78bfa"/>
+            <!-- Bottom-left corner -->
+            <rect x="8" y="62" width="30" height="30" rx="4" fill="#7c3aed" opacity="0.15"/>
+            <rect x="13" y="67" width="20" height="20" rx="2.5" fill="#7c3aed" opacity="0.25"/>
+            <rect x="18" y="72" width="10" height="10" rx="1.5" fill="#a78bfa"/>
+            <!-- Data dots -->
+            <rect x="48" y="8" width="7" height="7" rx="1.5" fill="#6d28d9"/>
+            <rect x="58" y="8" width="7" height="7" rx="1.5" fill="#6d28d9" opacity="0.5"/>
+            <rect x="8" y="48" width="7" height="7" rx="1.5" fill="#6d28d9" opacity="0.7"/>
+            <rect x="8" y="58" width="7" height="7" rx="1.5" fill="#6d28d9"/>
+            <rect x="48" y="48" width="7" height="7" rx="1.5" fill="#7c3aed"/>
+            <rect x="58" y="48" width="7" height="7" rx="1.5" fill="#6d28d9" opacity="0.6"/>
+            <rect x="48" y="58" width="7" height="7" rx="1.5" fill="#6d28d9" opacity="0.4"/>
+            <rect x="58" y="58" width="7" height="7" rx="1.5" fill="#7c3aed"/>
+            <rect x="68" y="48" width="7" height="7" rx="1.5" fill="#6d28d9" opacity="0.5"/>
+            <rect x="78" y="48" width="7" height="7" rx="1.5" fill="#7c3aed"/>
+            <rect x="68" y="58" width="7" height="7" rx="1.5" fill="#7c3aed" opacity="0.7"/>
+            <rect x="78" y="58" width="7" height="7" rx="1.5" fill="#6d28d9" opacity="0.4"/>
+            <rect x="48" y="68" width="7" height="7" rx="1.5" fill="#6d28d9"/>
+            <rect x="58" y="68" width="7" height="7" rx="1.5" fill="#7c3aed" opacity="0.5"/>
+            <rect x="48" y="78" width="7" height="7" rx="1.5" fill="#7c3aed" opacity="0.7"/>
+            <rect x="68" y="68" width="7" height="7" rx="1.5" fill="#6d28d9" opacity="0.3"/>
+            <rect x="78" y="68" width="7" height="7" rx="1.5" fill="#7c3aed"/>
+            <rect x="68" y="78" width="7" height="7" rx="1.5" fill="#7c3aed" opacity="0.6"/>
+            <rect x="78" y="78" width="7" height="7" rx="1.5" fill="#6d28d9"/>
+          </svg>
+        </div>
+      </div>
+
+      <h1>
+        <span class="gradient-text">QR-коды</span><br />
+        за секунды
+      </h1>
+
+      <p>
+        Создавайте стильные QR-коды для ссылок, контактов, Wi-Fi и событий.
+        Настраивайте дизайн, отслеживайте сканирования и редактируйте коды без замены.
+      </p>
+
+      <div class="hero-actions">
+        <button class="btn btn-primary btn-xl" onclick="void 0">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          Создать QR-код
+        </button>
+        <button class="btn btn-ghost btn-xl" onclick="void 0">Посмотреть тарифы</button>
+      </div>
+
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="stat-value">100K+</div>
+          <div class="stat-label">QR-кодов создано</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-value">5 типов</div>
+          <div class="stat-label">контента</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat">
+          <div class="stat-value">PNG / SVG</div>
+          <div class="stat-label">форматы экспорта</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="section-label">Возможности</div>
+    <h2 class="section-title">Всё что нужно<br />для работы с QR</h2>
+    <p class="section-desc">Мощный редактор, гибкие настройки и аналитика — в одном инструменте.</p>
+
+    <div class="features-grid">
+      <div class="card">
+        <div class="card-icon">🔗</div>
+        <h3>Разные типы контента</h3>
+        <p>Поддержка популярных форматов для любых задач — от сайта до визитки.</p>
+        <div class="tag-list">
+          <span class="tag">URL</span>
+          <span class="tag">Текст</span>
+          <span class="tag">vCard</span>
+          <span class="tag">Wi-Fi</span>
+          <span class="tag">Событие</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">🎨</div>
+        <h3>Кастомный дизайн</h3>
+        <p>Выберите цвет, форму углов и точек, добавьте логотип прямо в центр QR-кода.</p>
+        <div class="tag-list">
+          <span class="tag">Цвет</span>
+          <span class="tag">Логотип</span>
+          <span class="tag">Форма</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">📊</div>
+        <h3>Аналитика сканирований</h3>
+        <p>Отслеживайте сколько раз и когда сканировали ваш QR-код в реальном времени.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">✏️</div>
+        <h3>Редактирование без замены</h3>
+        <p>Измените ссылку или данные QR-кода в любой момент — сам код останется прежним.</p>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">💾</div>
+        <h3>Экспорт и хранение</h3>
+        <p>Скачивайте в PNG, SVG или PDF. Все коды хранятся в аккаунте для повторного использования.</p>
+        <div class="tag-list">
+          <span class="tag">PNG</span>
+          <span class="tag">SVG</span>
+          <span class="tag">PDF</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-icon">♾️</div>
+        <h3>Без лимитов по подписке</h3>
+        <p>Бесплатный план ограничен. Подписка снимает все ограничения на количество QR-кодов.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing" class="pricing-section">
+    <div class="section-label">Тарифы</div>
+    <h2 class="section-title">Простые и понятные цены</h2>
+    <p class="section-desc">Начните бесплатно, перейдите на Pro когда нужно больше.</p>
+
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="plan-name">Бесплатно</div>
+        <div class="plan-price">0 <sup>₽</sup></div>
+        <div class="plan-period">навсегда</div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> До 5 QR-кодов</li>
+          <li><span class="check">✓</span> URL и текст</li>
+          <li><span class="check">✓</span> Экспорт PNG</li>
+          <li><span class="check">✓</span> Базовый дизайн</li>
+        </ul>
+        <button class="btn btn-ghost" style="width:100%; padding:14px;" onclick="void 0">
+          Начать бесплатно
+        </button>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="plan-name">Pro</div>
+        <div class="plan-price"><sup>₽</sup>499</div>
+        <div class="plan-period">в месяц</div>
+        <ul class="plan-features">
+          <li><span class="check">✓</span> Неограниченные QR-коды</li>
+          <li><span class="check">✓</span> Все типы контента</li>
+          <li><span class="check">✓</span> PNG, SVG, PDF экспорт</li>
+          <li><span class="check">✓</span> Кастомный дизайн и логотип</li>
+          <li><span class="check">✓</span> Аналитика сканирований</li>
+          <li><span class="check">✓</span> Редактирование без замены</li>
+        </ul>
+        <button class="btn btn-primary" style="width:100%; padding:14px;" onclick="void 0">
+          Подключить Pro
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section">
+    <div class="glow glow-1"></div>
+    <div class="section-label">Старт</div>
+    <h2 class="section-title">Готовы создать<br />первый QR-код?</h2>
+    <p class="section-desc">Регистрация за 30 секунд. Первые 5 кодов — бесплатно и без ограничений по времени.</p>
+    <button class="btn btn-primary btn-xl" onclick="void 0">
+      Попробовать бесплатно
+    </button>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <a href="#" class="logo" style="font-size:16px;">
+      <div class="logo-icon" style="width:28px;height:28px;">
+        <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:16px;height:16px;">
+          <rect x="2" y="2" width="6" height="6" rx="1" fill="white"/>
+          <rect x="12" y="2" width="6" height="6" rx="1" fill="white"/>
+          <rect x="2" y="12" width="6" height="6" rx="1" fill="white"/>
+          <rect x="12" y="12" width="3" height="3" rx="0.5" fill="white"/>
+          <rect x="15" y="15" width="3" height="3" rx="0.5" fill="white"/>
+        </svg>
+      </div>
+      QRcraft
+    </a>
+    <div class="footer-links">
+      <a href="#">Конфиденциальность</a>
+      <a href="#">Условия</a>
+      <a href="#">Поддержка</a>
+    </div>
+    <span>© 2026 QRcraft</span>
+  </footer>
+
+</body>
+</html>
