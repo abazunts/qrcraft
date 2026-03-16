@@ -1,0 +1,158 @@
+{
+  "nav": {
+    "login": "Sign In",
+    "start": "Get Started Free",
+    "dashboard": "Dashboard",
+    "logout": "Sign Out"
+  },
+  "hero": {
+    "badge": "Free to get started",
+    "h1a": "QR Codes",
+    "h1b": "in seconds",
+    "desc": "Create stylish QR codes for links, contacts, Wi-Fi and events. Customize the design, track scans and edit codes without replacement.",
+    "cta": "Create QR Code",
+    "pricing": "View Pricing"
+  },
+  "stats": {
+    "generated": "QR codes generated",
+    "types": "content types",
+    "export": "export formats"
+  },
+  "features": {
+    "label": "Features",
+    "title": "Everything you need to work with QR",
+    "desc": "Powerful editor, flexible settings and analytics — all in one tool."
+  },
+  "f1": {
+    "title": "Multiple Content Types",
+    "desc": "Support for popular formats for any task — from websites to business cards."
+  },
+  "f2": {
+    "title": "Custom Design",
+    "desc": "Choose colors, corner and dot shapes, add your logo right in the center of the QR code."
+  },
+  "f3": {
+    "title": "Scan Analytics",
+    "desc": "Track how many times and when your QR code was scanned in real time."
+  },
+  "f4": {
+    "title": "Edit Without Replacement",
+    "desc": "Change the link or QR code data at any time — the code itself stays the same."
+  },
+  "f5": {
+    "title": "Export & Storage",
+    "desc": "Download as PNG, SVG or PDF. All codes are stored in your account for reuse."
+  },
+  "f6": {
+    "title": "Unlimited on Pro",
+    "desc": "The free plan has limits. A subscription removes all restrictions on the number of QR codes."
+  },
+  "tag": {
+    "text": "Text",
+    "event": "Event",
+    "color": "Color",
+    "logo": "Logo",
+    "shape": "Shape"
+  },
+  "pricing": {
+    "label": "Pricing",
+    "title": "Simple, transparent pricing",
+    "desc": "Start for free, upgrade to Pro when you need more."
+  },
+  "plan": {
+    "free": "Free",
+    "freePeriod": "forever",
+    "freeF1": "Up to 5 QR codes",
+    "freeF2": "URL and text",
+    "freeF3": "PNG export",
+    "freeF4": "Basic design",
+    "freeBtn": "Get Started Free",
+    "popular": "Popular",
+    "proPeriod": "per month",
+    "proF1": "Unlimited QR codes",
+    "proF2": "All content types",
+    "proF3": "PNG, SVG, PDF export",
+    "proF4": "Custom design & logo",
+    "proF5": "Scan analytics",
+    "proF6": "Edit without replacement",
+    "proBtn": "Get Pro"
+  },
+  "cta": {
+    "label": "Get Started",
+    "title": "Ready to create your first QR code?",
+    "desc": "Sign up in 30 seconds. First 5 codes are free with no time limit.",
+    "btn": "Try for Free"
+  },
+  "footer": {
+    "privacy": "Privacy",
+    "terms": "Terms",
+    "support": "Support",
+    "copy": "© 2026 QRcraft"
+  },
+  "login": {
+    "title": "Welcome to QRcraft",
+    "subtitle": "Sign in to manage your QR codes",
+    "google": "Continue with Google",
+    "terms": "By signing in, you agree to our Terms and Privacy Policy."
+  },
+  "dashboard": {
+    "title": "My QR Codes",
+    "empty": "No QR codes yet",
+    "emptyDesc": "Create your first QR code to get started.",
+    "create": "Create QR Code",
+    "scans": "scans",
+    "edit": "Edit",
+    "delete": "Delete",
+    "deleteConfirm": "Are you sure you want to delete this QR code?",
+    "freePlan": "Free plan: {count}/5 QR codes used",
+    "upgradeToPro": "Upgrade to Pro for unlimited codes"
+  },
+  "qrEditor": {
+    "title": "Create QR Code",
+    "editTitle": "Edit QR Code",
+    "step1": "Content",
+    "step2": "Design",
+    "step3": "Preview",
+    "nameLabel": "Name",
+    "namePlaceholder": "My QR Code",
+    "typeLabel": "Content Type",
+    "typeUrl": "URL / Link",
+    "typeText": "Text",
+    "typeVcard": "Contact (vCard)",
+    "typeWifi": "Wi-Fi",
+    "typeEvent": "Event",
+    "urlLabel": "URL",
+    "urlPlaceholder": "https://example.com",
+    "textLabel": "Text",
+    "textPlaceholder": "Enter your text...",
+    "fgColor": "Foreground Color",
+    "bgColor": "Background Color",
+    "dotStyle": "Dot Style",
+    "cornerStyle": "Corner Style",
+    "next": "Next",
+    "back": "Back",
+    "save": "Save QR Code",
+    "saving": "Saving...",
+    "cancel": "Cancel"
+  },
+  "billing": {
+    "title": "Upgrade to Pro",
+    "currentPlan": "Current plan: {plan}",
+    "freePlanName": "Free",
+    "proPlanName": "Pro",
+    "price": "€4.99",
+    "period": "per month",
+    "getProBtn": "Get Pro"
+  },
+  "comingSoon": {
+    "title": "Coming Soon",
+    "desc": "Payment integration is coming soon. Stay tuned!",
+    "close": "Close"
+  },
+  "sidebar": {
+    "dashboard": "Dashboard",
+    "newQr": "New QR Code",
+    "billing": "Billing",
+    "signOut": "Sign Out"
+  }
+}
