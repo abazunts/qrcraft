@@ -595,13 +595,13 @@ export default async function LandingPage() {
           QRcraft
         </Link>
         <div className="flex gap-6">
-          <a href="#" style={{ color: "var(--muted)", textDecoration: "none" }}>
+          <Link href="/privacy" style={{ color: "var(--muted)", textDecoration: "none" }}>
             {t("footer.privacy")}
-          </a>
-          <a href="#" style={{ color: "var(--muted)", textDecoration: "none" }}>
+          </Link>
+          <Link href="/terms" style={{ color: "var(--muted)", textDecoration: "none" }}>
             {t("footer.terms")}
-          </a>
-          <a href="#" style={{ color: "var(--muted)", textDecoration: "none" }}>
+          </Link>
+          <a href="mailto:support@qrcraft.app" style={{ color: "var(--muted)", textDecoration: "none" }}>
             {t("footer.support")}
           </a>
         </div>

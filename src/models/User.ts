@@ -5,6 +5,7 @@ export interface IUser extends Document {
   email: string;
   image?: string;
   plan: "free" | "pro";
+  liqpayOrderId?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -15,6 +16,7 @@ const UserSchema = new Schema<IUser>(
     email: { type: String, required: true, unique: true },
     image: { type: String },
     plan: { type: String, enum: ["free", "pro"], default: "free" },
+    liqpayOrderId: { type: String },
   },
   { timestamps: true }
 );

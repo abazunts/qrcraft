@@ -136,13 +136,17 @@
     "cancel": "Скасувати"
   },
   "billing": {
-    "title": "Перейти на Pro",
+    "title": "Підписка та тарифи",
     "currentPlan": "Поточний план: {plan}",
     "freePlanName": "Безкоштовний",
     "proPlanName": "Pro",
     "price": "€4.99",
     "period": "на місяць",
-    "getProBtn": "Підключити Pro"
+    "getProBtn": "Підключити Pro",
+    "cancelBtn": "Скасувати підписку",
+    "cancelConfirm": "Ви впевнені, що хочете скасувати підписку Pro?",
+    "activePlan": "Активний",
+    "loading": "Зачекайте..."
   },
   "comingSoon": {
     "title": "Незабаром",

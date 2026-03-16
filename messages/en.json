@@ -136,13 +136,17 @@
     "cancel": "Cancel"
   },
   "billing": {
-    "title": "Upgrade to Pro",
+    "title": "Billing & Plans",
     "currentPlan": "Current plan: {plan}",
     "freePlanName": "Free",
     "proPlanName": "Pro",
     "price": "€4.99",
     "period": "per month",
-    "getProBtn": "Get Pro"
+    "getProBtn": "Get Pro",
+    "cancelBtn": "Cancel subscription",
+    "cancelConfirm": "Are you sure you want to cancel your Pro subscription?",
+    "activePlan": "Active",
+    "loading": "Please wait..."
   },
   "comingSoon": {
     "title": "Coming Soon",
