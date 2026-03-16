@@ -93,7 +93,7 @@ export default function QREditor({ initialData }: QREditorProps) {
         {isEditing ? t("qrEditor.editTitle") : t("qrEditor.title")}
       </h1>
 
-      <div className="flex gap-6 items-start">
+      <div className="flex flex-col lg:flex-row gap-6 lg:items-start">
         {/* ── LEFT: form ── */}
         <div className="flex-1 min-w-0">
           {/* Tabs */}
@@ -283,7 +283,7 @@ export default function QREditor({ initialData }: QREditorProps) {
         </div>
 
         {/* ── RIGHT: live preview ── */}
-        <div className="w-64 flex-shrink-0 sticky top-8">
+        <div className="w-full lg:w-64 lg:flex-shrink-0 lg:sticky lg:top-8">
           <div
             className="rounded-[20px] p-6 flex flex-col items-center gap-4"
             style={{ background: "var(--surface)", border: "1px solid var(--border)" }}

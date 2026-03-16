@@ -118,10 +118,10 @@ export default function QRCard({ qr, onDelete }: QRCardProps) {
       </div>
 
       {/* Edit / Delete */}
-      <div className="flex gap-2">
+      <div className="flex flex-col gap-2">
         <Link
           href={`/qr/${qr._id}`}
-          className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-semibold no-underline transition-all duration-200"
+          className="w-full inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-lg text-xs font-semibold no-underline transition-all duration-200"
           style={{
             background: "transparent",
             color: "var(--muted)",
@@ -131,7 +131,7 @@ export default function QRCard({ qr, onDelete }: QRCardProps) {
           <Pencil size={13} />
           {t("dashboard.edit")}
         </Link>
-        <Button variant="danger" size="sm" onClick={handleDelete} className="flex-1">
+        <Button variant="danger" size="sm" onClick={handleDelete} className="w-full">
           <Trash2 size={13} />
           {t("dashboard.delete")}
         </Button>
