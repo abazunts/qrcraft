@@ -77,6 +77,42 @@
     "proF6": "Edit without replacement",
     "proBtn": "Get Pro"
   },
+  "testimonials": {
+    "label": "Testimonials",
+    "title": "Why Our Customers Choose QRcraft",
+    "items": [
+      {
+        "text": "I needed to update a QR code on 500 printed flyers. With QRcraft I just changed the URL — no reprint needed. Saved us a fortune.",
+        "name": "Olena Marchenko",
+        "role": "Marketing Manager"
+      },
+      {
+        "text": "Set up a Wi-Fi QR code for our café in 2 minutes. Guests love it, and I love that I can update the password without replacing anything.",
+        "name": "Dmytro Kovalenko",
+        "role": "Café Owner"
+      },
+      {
+        "text": "The design customisation is excellent. Our QR codes actually look branded now, not like random black-and-white squares.",
+        "name": "Sarah Mitchell",
+        "role": "Brand Designer"
+      },
+      {
+        "text": "Scan analytics helped us figure out which booth locations at our event were getting the most engagement. Super useful.",
+        "name": "Ivan Petrenko",
+        "role": "Event Organiser"
+      },
+      {
+        "text": "Free plan was more than enough to get started. Upgraded to Pro once our team grew. Smooth experience throughout.",
+        "name": "Anna Boyko",
+        "role": "Startup Founder"
+      },
+      {
+        "text": "Finally a QR tool that does not look like it was built in 2010. Clean UI, fast, and everything just works.",
+        "name": "Lucas Ferreira",
+        "role": "Product Designer"
+      }
+    ]
+  },
   "cta": {
     "label": "Get Started",
     "title": "Ready to create your first QR code?",

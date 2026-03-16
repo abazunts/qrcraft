@@ -522,6 +522,66 @@ export default async function LandingPage() {
         </div>
       </section>
 
+      {/* Testimonials */}
+      <section className="py-[100px] px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-14">
+            <span
+              className="inline-block text-xs font-bold uppercase tracking-[2px] px-3 py-1 rounded-full mb-4"
+              style={{ background: "rgba(124,58,237,0.15)", color: "var(--purple-light)" }}
+            >
+              {t("testimonials.label")}
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-black tracking-[-1px]" style={{ color: "var(--text)" }}>
+              {t("testimonials.title")}
+            </h2>
+          </div>
+
+          <div
+            className="grid gap-4"
+            style={{ gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))" }}
+          >
+            {(t.raw("testimonials.items") as { text: string; name: string; role: string }[]).map((item, i) => (
+              <div
+                key={i}
+                className="rounded-[20px] p-6 flex flex-col gap-4"
+                style={{ background: "var(--surface)", border: "1px solid var(--border)" }}
+              >
+                {/* Stars */}
+                <div className="flex gap-1">
+                  {Array.from({ length: 5 }).map((_, s) => (
+                    <svg key={s} width="14" height="14" viewBox="0 0 14 14" fill="#f59e0b">
+                      <path d="M7 1l1.545 3.09L12 4.635l-2.5 2.41.59 3.41L7 8.77l-3.09 1.685.59-3.41L2 4.635l3.455-.545L7 1z" />
+                    </svg>
+                  ))}
+                </div>
+
+                <p className="text-sm leading-relaxed flex-1" style={{ color: "var(--muted)" }}>
+                  &ldquo;{item.text}&rdquo;
+                </p>
+
+                <div className="flex items-center gap-3">
+                  {/* Avatar placeholder */}
+                  <div
+                    className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0"
+                    style={{
+                      background: `hsl(${(item.name.charCodeAt(0) * 37) % 360}, 60%, 35%)`,
+                      color: "#fff",
+                    }}
+                  >
+                    {item.name.charAt(0)}
+                  </div>
+                  <div>
+                    <p className="text-sm font-semibold" style={{ color: "var(--text)" }}>{item.name}</p>
+                    <p className="text-xs" style={{ color: "var(--muted)" }}>{item.role}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA */}
       <section
         className="py-[100px] px-6 text-center relative overflow-hidden"
