@@ -3,6 +3,7 @@ import { auth } from "@/lib/auth";
 import { createUnsubscribeParams } from "@/lib/liqpay";
 import { connectDB } from "@/lib/db";
 import User from "@/models/User";
+import Plan from "@/models/Plan";
 
 export async function POST() {
   const session = await auth();
@@ -11,8 +12,11 @@ export async function POST() {
   }
 
   await connectDB();
+
+  const proPlan = await Plan.findOne({ slug: "pro", isActive: true }).lean();
   const user = await User.findById(session.user.id);
-  if (!user || user.plan !== "pro" || !user.liqpayOrderId) {
+
+  if (!user || !user.liqpayOrderId || user.planId?.toString() !== proPlan?._id.toString()) {
     return NextResponse.json({ error: "No active subscription" }, { status: 400 });
   }
 
@@ -27,7 +31,11 @@ export async function POST() {
   const result = await res.json() as { status?: string; err_description?: string };
 
   if (result.status === "unsubscribed" || result.status === "ok") {
-    await User.findByIdAndUpdate(session.user.id, { plan: "free", liqpayOrderId: null });
+    const freePlan = await Plan.findOne({ slug: "free", isActive: true }).lean();
+    await User.findByIdAndUpdate(session.user.id, {
+      planId: freePlan?._id,
+      liqpayOrderId: null,
+    });
     return NextResponse.json({ ok: true });
   }
 

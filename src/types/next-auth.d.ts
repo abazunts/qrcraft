@@ -4,17 +4,17 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: string;
-      plan: "free" | "pro";
+      planId: string;
     } & DefaultSession["user"];
   }
 
   interface User {
-    plan?: "free" | "pro";
+    planId?: string;
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
-    plan?: "free" | "pro";
+    planId?: string | null;
   }
 }

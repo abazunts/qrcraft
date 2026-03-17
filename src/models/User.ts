@@ -1,10 +1,10 @@
-import mongoose, { Schema, Document, Model } from "mongoose";
+import mongoose, { Schema, Document, Model, Types } from "mongoose";
 
 export interface IUser extends Document {
   name?: string;
   email: string;
   image?: string;
-  plan: "free" | "pro";
+  planId?: Types.ObjectId;
   liqpayOrderId?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -15,7 +15,7 @@ const UserSchema = new Schema<IUser>(
     name: { type: String },
     email: { type: String, required: true, unique: true },
     image: { type: String },
-    plan: { type: String, enum: ["free", "pro"], default: "free" },
+    planId: { type: Schema.Types.ObjectId, ref: "Plan" },
     liqpayOrderId: { type: String },
   },
   { timestamps: true }

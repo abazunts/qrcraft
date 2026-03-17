@@ -22,14 +22,14 @@ export function decodeData(data: string): Record<string, string> {
   return JSON.parse(Buffer.from(data, "base64").toString("utf8")) as Record<string, string>;
 }
 
-export function createSubscribeParams(orderId: string, userEmail: string) {
+export function createSubscribeParams(orderId: string, userEmail: string, amount = 4.99, currency = "EUR") {
   const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
   const params = {
     public_key: PUBLIC_KEY,
     version: "3",
     action: "subscribe",
-    amount: "4.99",
-    currency: "EUR",
+    amount: String(amount),
+    currency,
     description: "QRcraft Pro — monthly subscription",
     order_id: orderId,
     subscribe: "1",
@@ -42,6 +42,40 @@ export function createSubscribeParams(orderId: string, userEmail: string) {
   const data = buildData(params);
   const signature = buildSignature(data);
   return { data, signature };
+}
+
+export async function fetchPaymentHistory(dateFrom: Date, dateTo: Date) {
+  const params = {
+    public_key: PUBLIC_KEY,
+    version: "3",
+    action: "reports",
+    date_from: dateFrom.getTime(),
+    date_to: dateTo.getTime(),
+    resp_format: "json",
+  };
+  const data = buildData(params as unknown as Record<string, string | number>);
+  const signature = buildSignature(data);
+
+  const res = await fetch("https://www.liqpay.ua/api/request", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ data, signature }),
+  });
+
+  return res.json() as Promise<{
+    status: string;
+    data?: Array<{
+      payment_id: string;
+      order_id: string;
+      status: string;
+      amount: number;
+      currency: string;
+      description: string;
+      create_date: number;
+      end_date: number;
+      customer: string;
+    }>;
+  }>;
 }
 
 export function createUnsubscribeParams(orderId: string) {

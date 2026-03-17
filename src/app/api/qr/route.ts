@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
 import QRCode from "@/models/QRCode";
+import Plan from "@/models/Plan";
 import { buildQRString, generateQRDataURL } from "@/lib/qr-generate";
 import { nanoid } from "nanoid";
 
@@ -27,12 +28,15 @@ export async function POST(req: Request) {
 
   await connectDB();
 
-  // Free plan limit: max 5 QR codes
-  if (session.user.plan === "free") {
+  const planDoc = session.user.planId
+    ? await Plan.findById(session.user.planId).lean()
+    : await Plan.findOne({ slug: "free", isActive: true }).lean();
+  const maxQRCodes = planDoc?.maxQRCodes ?? 5;
+  if (maxQRCodes !== -1) {
     const count = await QRCode.countDocuments({ userId: session.user.id });
-    if (count >= 5) {
+    if (count >= maxQRCodes) {
       return NextResponse.json(
-        { error: "Free plan limit reached. Upgrade to Pro for unlimited QR codes." },
+        { error: "Plan limit reached. Upgrade to Pro for unlimited QR codes." },
         { status: 403 }
       );
     }

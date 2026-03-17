@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { verifySignature, decodeData } from "@/lib/liqpay";
 import { connectDB } from "@/lib/db";
 import User from "@/models/User";
+import Plan from "@/models/Plan";
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
@@ -22,14 +23,18 @@ export async function POST(req: NextRequest) {
   await connectDB();
 
   if (status === "subscribed" || status === "success") {
-    await User.findOneAndUpdate(
-      { liqpayOrderId: order_id },
-      { plan: "pro" }
-    );
+    const proPlan = await Plan.findOne({ slug: "pro", isActive: true }).lean();
+    if (proPlan) {
+      await User.findOneAndUpdate(
+        { liqpayOrderId: order_id },
+        { planId: proPlan._id }
+      );
+    }
   } else if (status === "unsubscribed" || status === "error" || status === "failure") {
+    const freePlan = await Plan.findOne({ slug: "free", isActive: true }).lean();
     await User.findOneAndUpdate(
       { liqpayOrderId: order_id },
-      { plan: "free", liqpayOrderId: null }
+      { planId: freePlan?._id, liqpayOrderId: null }
     );
   }
 

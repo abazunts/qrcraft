@@ -75,7 +75,14 @@
     "proF4": "Кастомний дизайн і логотип",
     "proF5": "Аналітика сканувань",
     "proF6": "Редагування без заміни",
-    "proBtn": "Підключити Pro"
+    "proBtn": "Підключити Pro",
+    "businessPeriod": "на місяць",
+    "businessF1": "До 20 QR-кодів",
+    "businessF2": "Всі типи контенту",
+    "businessF3": "Експорт PNG та SVG",
+    "businessF4": "Кастомний дизайн",
+    "businessF5": "Аналітика сканувань",
+    "businessBtn": "Підключити Business"
   },
   "testimonials": {
     "label": "Відгуки",
@@ -176,6 +183,7 @@
     "currentPlan": "Поточний план: {plan}",
     "freePlanName": "Безкоштовний",
     "proPlanName": "Pro",
+    "businessPlanName": "Business",
     "price": "€4.99",
     "period": "на місяць",
     "getProBtn": "Підключити Pro",

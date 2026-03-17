@@ -75,7 +75,14 @@
     "proF4": "Custom design & logo",
     "proF5": "Scan analytics",
     "proF6": "Edit without replacement",
-    "proBtn": "Get Pro"
+    "proBtn": "Get Pro",
+    "businessPeriod": "per month",
+    "businessF1": "Up to 20 QR codes",
+    "businessF2": "All content types",
+    "businessF3": "PNG & SVG export",
+    "businessF4": "Custom design",
+    "businessF5": "Scan analytics",
+    "businessBtn": "Get Business"
   },
   "testimonials": {
     "label": "Testimonials",
@@ -176,6 +183,7 @@
     "currentPlan": "Current plan: {plan}",
     "freePlanName": "Free",
     "proPlanName": "Pro",
+    "businessPlanName": "Business",
     "price": "€4.99",
     "period": "per month",
     "getProBtn": "Get Pro",
