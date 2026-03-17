@@ -2,6 +2,8 @@ import { getTranslations } from "next-intl/server";
 import { auth } from "@/lib/auth";
 import LangSwitcher from "@/components/LangSwitcher";
 import { Link } from "@/i18n/navigation";
+import { connectDB } from "@/lib/db";
+import Plan, { IPlan } from "@/models/Plan";
 
 const QRLogoSvg = () => (
   <svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -51,6 +53,9 @@ const QRPreviewSvg = () => (
 export default async function LandingPage() {
   const t = await getTranslations();
   const session = await auth();
+
+  await connectDB();
+  const plans = await Plan.find({ isActive: true }).sort({ price: 1 }).lean() as unknown as IPlan[];
 
   const features = [
     {
@@ -388,137 +393,80 @@ export default async function LandingPage() {
         </p>
 
         <div
-          className="grid gap-5 max-w-[800px] mx-auto"
-          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))" }}
+          className="grid gap-5 max-w-[1000px] mx-auto"
+          style={{ gridTemplateColumns: `repeat(${plans.length}, minmax(0, 1fr))` }}
         >
-          {/* Free plan */}
-          <div
-            className="rounded-[16px] p-10"
-            style={{
-              background: "var(--bg)",
-              border: "1px solid var(--border)",
-            }}
-          >
-            <div
-              className="text-[15px] font-bold uppercase tracking-[1px] mb-4"
-              style={{ color: "var(--muted)" }}
-            >
-              {t("plan.free")}
-            </div>
-            <div
-              className="font-black tracking-[-2px] mb-1 leading-none"
-              style={{ fontSize: 52 }}
-            >
-              0 <sup className="text-2xl font-bold align-super tracking-normal">€</sup>
-            </div>
-            <div className="text-sm mb-8" style={{ color: "var(--muted)" }}>
-              {t("plan.freePeriod")}
-            </div>
-            <ul className="mb-9 list-none">
-              {(["freeF1", "freeF2", "freeF3", "freeF4"] as const).map((k) => (
-                <li
-                  key={k}
-                  className="flex items-center gap-3 text-sm py-2"
+          {plans.map((plan) => {
+            const isFree = plan.price === 0;
+            const symbol = plan.currency === "EUR" ? "€" : plan.currency;
+            const btnKey = `plan.${plan.slug}Btn` as Parameters<typeof t>[0];
+            const periodKey = `plan.${plan.slug}Period` as Parameters<typeof t>[0];
+            return (
+              <div
+                key={plan.slug}
+                className="rounded-[16px] p-10 relative flex flex-col"
+                style={{
+                  background: isFree
+                    ? "var(--bg)"
+                    : "linear-gradient(145deg, rgba(124,58,237,0.12), rgba(79,70,229,0.08))",
+                  border: isFree
+                    ? "1px solid var(--border)"
+                    : "1px solid rgba(124,58,237,0.5)",
+                }}
+              >
+                {plan.isPopular && (
+                  <span
+                    className="absolute top-[-1px] right-7 text-xs font-bold tracking-[0.3px] px-[14px] py-[5px] rounded-b-[10px]"
+                    style={{ background: "linear-gradient(135deg, #7c3aed, #4f46e5)", color: "#fff" }}
+                  >
+                    {t("plan.popular")}
+                  </span>
+                )}
+                <div className="text-[15px] font-bold uppercase tracking-[1px] mb-4" style={{ color: "var(--muted)" }}>
+                  {plan.slug.charAt(0).toUpperCase() + plan.slug.slice(1)}
+                </div>
+                <div className="font-black tracking-[-2px] mb-1 leading-none" style={{ fontSize: 52 }}>
+                  {isFree
+                    ? <>0 <sup className="text-2xl font-bold align-super tracking-normal">{symbol}</sup></>
+                    : <><sup className="text-2xl font-bold align-super tracking-normal">{symbol}</sup>{plan.price}</>
+                  }
+                </div>
+                <div className="text-sm mb-8" style={{ color: "var(--muted)" }}>
+                  {t(periodKey)}
+                </div>
+                <ul className="mb-9 list-none flex-1">
+                  {plan.featureKeys.map((k) => (
+                    <li
+                      key={k}
+                      className="flex items-center gap-3 text-sm py-2"
+                      style={{ color: "var(--muted)", borderBottom: "1px solid var(--border)" }}
+                    >
+                      <span
+                        className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-[11px]"
+                        style={{ background: "rgba(124,58,237,0.2)", color: "var(--purple-light)" }}
+                      >
+                        ✓
+                      </span>
+                      {t(k as Parameters<typeof t>[0])}
+                    </li>
+                  ))}
+                </ul>
+                <Link
+                  href={isFree ? "/login" : "/billing"}
+                  className="block text-center rounded-xl text-sm font-semibold no-underline transition-all duration-200"
                   style={{
-                    color: "var(--muted)",
-                    borderBottom: "1px solid var(--border)",
+                    padding: "14px",
+                    background: isFree ? "transparent" : "linear-gradient(135deg, #7c3aed, #4f46e5)",
+                    color: isFree ? "var(--muted)" : "#fff",
+                    border: isFree ? "1px solid var(--border)" : "none",
+                    boxShadow: isFree ? "none" : "0 0 24px rgba(124,58,237,0.35)",
                   }}
                 >
-                  <span
-                    className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-[11px]"
-                    style={{
-                      background: "rgba(124,58,237,0.2)",
-                      color: "var(--purple-light)",
-                    }}
-                  >
-                    ✓
-                  </span>
-                  {t(`plan.${k}` as Parameters<typeof t>[0])}
-                </li>
-              ))}
-            </ul>
-            <Link
-              href="/login"
-              className="block text-center rounded-xl text-sm font-semibold no-underline transition-all duration-200"
-              style={{
-                padding: "14px",
-                background: "transparent",
-                color: "var(--muted)",
-                border: "1px solid var(--border)",
-              }}
-            >
-              {t("plan.freeBtn")}
-            </Link>
-          </div>
-
-          {/* Pro plan */}
-          <div
-            className="rounded-[16px] p-10 relative"
-            style={{
-              background: "linear-gradient(145deg, rgba(124,58,237,0.12), rgba(79,70,229,0.08))",
-              border: "1px solid rgba(124,58,237,0.5)",
-            }}
-          >
-            <span
-              className="absolute top-[-1px] right-7 text-xs font-bold tracking-[0.3px] px-[14px] py-[5px] rounded-b-[10px]"
-              style={{
-                background: "linear-gradient(135deg, #7c3aed, #4f46e5)",
-                color: "#fff",
-              }}
-            >
-              {t("plan.popular")}
-            </span>
-            <div
-              className="text-[15px] font-bold uppercase tracking-[1px] mb-4"
-              style={{ color: "var(--muted)" }}
-            >
-              Pro
-            </div>
-            <div
-              className="font-black tracking-[-2px] mb-1 leading-none"
-              style={{ fontSize: 52 }}
-            >
-              <sup className="text-2xl font-bold align-super tracking-normal">€</sup>4.99
-            </div>
-            <div className="text-sm mb-8" style={{ color: "var(--muted)" }}>
-              {t("plan.proPeriod")}
-            </div>
-            <ul className="mb-9 list-none">
-              {(["proF1", "proF2", "proF3", "proF4", "proF5", "proF6"] as const).map((k) => (
-                <li
-                  key={k}
-                  className="flex items-center gap-3 text-sm py-2"
-                  style={{
-                    color: "var(--muted)",
-                    borderBottom: "1px solid var(--border)",
-                  }}
-                >
-                  <span
-                    className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 text-[11px]"
-                    style={{
-                      background: "rgba(124,58,237,0.2)",
-                      color: "var(--purple-light)",
-                    }}
-                  >
-                    ✓
-                  </span>
-                  {t(`plan.${k}` as Parameters<typeof t>[0])}
-                </li>
-              ))}
-            </ul>
-            <Link
-              href="/billing"
-              className="block text-center rounded-xl text-sm font-semibold no-underline transition-all duration-200"
-              style={{
-                padding: "14px",
-                background: "linear-gradient(135deg, #7c3aed, #4f46e5)",
-                color: "#fff",
-                boxShadow: "0 0 24px rgba(124,58,237,0.35)",
-              }}
-            >
-              {t("plan.proBtn")}
-            </Link>
-          </div>
+                  {t(btnKey)}
+                </Link>
+              </div>
+            );
+          })}
         </div>
       </section>
 
