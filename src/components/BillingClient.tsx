@@ -29,11 +29,15 @@ export default function BillingClient({ userPlanSlug, plans }: BillingClientProp
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSubscribe = async () => {
+  const handleSubscribe = async (planId: string) => {
     setLoading(true);
     setError("");
     try {
-      const res = await fetch("/api/billing/subscribe", { method: "POST" });
+      const res = await fetch("/api/billing/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ planId }),
+      });
       const json = await res.json() as { data?: string; signature?: string; error?: string };
       if (!res.ok) { setError(json.error ?? "Error"); setLoading(false); return; }
 
@@ -169,7 +173,7 @@ export default function BillingClient({ userPlanSlug, plans }: BillingClientProp
                   {loading ? t("billing.loading") : t("billing.cancelBtn")}
                 </Button>
               ) : (
-                <Button variant="primary" className="w-full" onClick={handleSubscribe} disabled={loading}>
+                <Button variant="primary" className="w-full" onClick={() => handleSubscribe(plan.id)} disabled={loading}>
                   {loading ? t("billing.loading") : t("billing.getProBtn")}
                 </Button>
               )
